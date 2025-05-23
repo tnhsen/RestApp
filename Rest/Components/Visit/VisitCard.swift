@@ -36,7 +36,10 @@ struct VisitAdminCard: View {
                     
                 }
                 
-                Text("คุณมีคิวเข้าชมหอ \(visit.dormName) โดยผู้เข้าชื่อ \(visit.firstName) \(visit.lastName)")
+                let fullText = "คุณมีคิวเข้าชมหอ \(visit.dormName) โดยผู้เข้าชื่อ \(visit.firstName) \(visit.lastName)"
+                let limitedText = String(fullText.prefix(30))
+
+                Text(limitedText)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(5)

@@ -18,42 +18,110 @@ struct ChatMessageView: View {
                 ScrollView {
                     
                     LazyVStack(alignment: .leading, spacing: 10) {
+                        
+                        //let messages = dataModel.chatMessage[chat.chatId] ?? []
+
                         let messages = dataModel.chatMessage[chat.chatId] ?? []
+                        let groupedMessages = Dictionary(grouping: messages) { message in
+                            Calendar.current.startOfDay(for: message.timestamp)
+                        }
+                        let sortedDates = groupedMessages.keys.sorted()
 
-                        ForEach(Array(messages.enumerated()), id: \.element.id) { index, message in
-                            VStack(alignment: message.senderId == dataModel.userInfo.id ? .trailing : .leading, spacing: 2) {
-                                if message.senderId != dataModel.userInfo.id &&
-                                    (index == 0 || messages[index - 1].senderId == dataModel.userInfo.id) {
-                                    Text(getOtherUserMember(chat: chat, dataModel: dataModel))
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
+                        
+//                        ForEach(Array(messages.enumerated()), id: \.element.id) { index, message in
+//                            VStack(alignment: message.senderId == dataModel.userInfo.id ? .trailing : .leading, spacing: 2) {
+//                                if message.senderId != dataModel.userInfo.id &&
+//                                    (index == 0 || messages[index - 1].senderId == dataModel.userInfo.id) {
+//                                    Text(getOtherUserMember(chat: chat, dataModel: dataModel))
+//                                        .font(.caption)
+//                                        .foregroundColor(.gray)
+//                                }
+//
+//                                HStack {
+//                                    if message.senderId == dataModel.userInfo.id {
+//                                        Spacer()
+//                                        Text(message.timestamp.formatted(date: .omitted, time: .shortened))
+//                                            .font(.caption2)
+//                                            .foregroundColor(.gray)
+//                                        Text(message.text)
+//                                            .padding()
+//                                            .background(Color(hex: colorLevel1))
+//                                            .foregroundColor(.white)
+//                                            .cornerRadius(12)
+//                                    } else {
+//                                        Text(message.text)
+//                                            .padding()
+//                                            .background(Color.gray.opacity(0.2))
+//                                            .cornerRadius(12)
+//                                        Text(message.timestamp.formatted(date: .omitted, time: .shortened))
+//                                            .font(.caption2)
+//                                            .foregroundColor(.gray)
+//                                        Spacer()
+//                                    }
+//                                }
+//                                .id(message.id)
+//                            }
+//                        }
+                        
+                        ForEach(sortedDates, id: \.self) { date in
+                            Section {
+                                if let messagesForDate = groupedMessages[date] {
+                                    ForEach(Array(messagesForDate.enumerated()), id: \.element.id) { index, message in
+                                        VStack(alignment: message.senderId == dataModel.userInfo.id ? .trailing : .leading, spacing: 2) {
+                                            if message.senderId != dataModel.userInfo.id &&
+                                                (index == 0 || messagesForDate[index - 1].senderId == dataModel.userInfo.id) {
+                                                Text(getOtherUserMember(chat: chat, dataModel: dataModel))
+                                                    .font(.caption)
+                                                    .foregroundColor(.gray)
+                                            }
 
-                                HStack {
-                                    if message.senderId == dataModel.userInfo.id {
-                                        Spacer()
-                                        Text(message.timestamp.formatted(date: .omitted, time: .shortened))
-                                            .font(.caption2)
-                                            .foregroundColor(.gray)
-                                        Text(message.text)
-                                            .padding()
-                                            .background(Color(hex: colorLevel1))
-                                            .foregroundColor(.white)
-                                            .cornerRadius(12)
-                                    } else {
-                                        Text(message.text)
-                                            .padding()
-                                            .background(Color.gray.opacity(0.2))
-                                            .cornerRadius(12)
-                                        Text(message.timestamp.formatted(date: .omitted, time: .shortened))
-                                            .font(.caption2)
-                                            .foregroundColor(.gray)
-                                        Spacer()
+                                            HStack {
+                                                if message.senderId == dataModel.userInfo.id {
+                                                    Spacer()
+                                                    Text(message.timestamp.formatted(date: .omitted, time: .shortened))
+                                                        .font(.caption2)
+                                                        .foregroundColor(.gray)
+                                                    Text(message.text)
+                                                        .padding()
+                                                        .background(Color(hex: colorLevel1))
+                                                        .foregroundColor(.white)
+                                                        .cornerRadius(12)
+                                                } else {
+                                                    Text(message.text)
+                                                        .padding()
+                                                        .background(Color.gray.opacity(0.2))
+                                                        .cornerRadius(12)
+                                                    Text(message.timestamp.formatted(date: .omitted, time: .shortened))
+                                                        .font(.caption2)
+                                                        .foregroundColor(.gray)
+                                                    Spacer()
+                                                }
+                                            }
+                                            .id(message.id)
+                                        }
                                     }
                                 }
-                                .id(message.id)
                             }
+//                            header: {
+//                                Text(date.formatted(date: .abbreviated, time: .omitted))
+//                                    .font(.caption)
+//                                    .foregroundColor(.secondary)
+//                                    .padding(.top, 10)
+//                            }
+                            
+                            header: {
+                                HStack {
+                                    Spacer()
+                                    Text(thaiDateString(from: date))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                        .padding(.vertical, 5)
+                                    Spacer()
+                                }
+                            }
+
                         }
+
                     }
 
 
@@ -115,4 +183,15 @@ struct ChatMessageView: View {
             FetchData.fetchMessages(chatId: chat.chatId, dataModel: dataModel)
         }
     }
+    
+    
+    func thaiDateString(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "th_TH")
+        formatter.calendar = Calendar(identifier: .buddhist)
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
 }

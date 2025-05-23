@@ -108,13 +108,13 @@ struct EditDormFormView: View {
                     }
                     
                     
-                    TextField("จำนวนห้อง", text: $dataModel.dorm.room)
-                        .padding()
-                        .frame(width: 275, height: 40)
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
-                        .multilineTextAlignment(.center)
-                    
+//                    TextField("จำนวนห้อง", text: $dataModel.dorm.room)
+//                        .padding()
+//                        .frame(width: 275, height: 40)
+//                        .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray6)))
+//                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
+//                        .multilineTextAlignment(.center)
+//                    
                     TextField("เบอร์โทร", text: $dataModel.dorm.phoneNumber)
                         .padding()
                         .frame(width: 275, height: 40)

@@ -123,12 +123,211 @@ final class DataModel: ObservableObject {
         }
     }
     
+    
+    func deleteUserDormInfo(uid: String){
+        let db = Firestore.firestore()
+        let dormRef = db.collection("users").document(uid)
+        
+        dormRef.collection("Bill").getDocuments { snapshot, error in
+            if let error = error {
+                print("❌ Error fetching bills: \(error)")
+                return
+            }
+            
+            let batch = db.batch()
+            snapshot?.documents.forEach { doc in
+                batch.deleteDocument(doc.reference)
+            }
+            
+            batch.commit { err in
+                if let err = err {
+                    print("❌ Error deleting bills: \(err)")
+                    return
+                }
+                
+                print("Delete Bills")
+                
+                dormRef.collection("Report").getDocuments { snapshot2, error2 in
+                    if let error2 = error2 {
+                        print("❌ Error fetching report: \(error2)")
+                        return
+                    }
+                    
+                    let batch2 = db.batch()
+                    snapshot2?.documents.forEach { doc in
+                        batch.deleteDocument(doc.reference)
+                    }
+                    
+                    batch2.commit { err2 in
+                        if let err2 = err2 {
+                            print("❌ Error deleting report: \(err2)")
+                            return
+                        }
+                        
+                        print("Delete report")
+                        
+                        dormRef.collection("dormInfo").getDocuments { snapshot3, error3 in
+                            if let error3 = error3 {
+                                print("❌ Error fetching dormInfo: \(error3)")
+                                return
+                            }
+                            
+                            let batch3 = db.batch()
+                            snapshot3?.documents.forEach { doc in
+                                batch3.deleteDocument(doc.reference)
+                            }
+                            
+                            batch3.commit { err3 in
+                                if let err3 = err3 {
+                                    print("❌ Error deleting dormInfo: \(err3)")
+                                    return
+                                }
+                                
+                                print("Delete dormInfo")
+                                
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    func deleteDormWithSubcollections(uid: String) {
+        let db = Firestore.firestore()
+        let dormRef = db.collection("dormitory").document(uid)
+        
+        dormRef.collection("Room").getDocuments { snapshot, error in
+            if let error = error {
+                print("❌ Error fetching rooms: \(error)")
+                return
+            }
+            
+            let batch = db.batch()
+            snapshot?.documents.forEach { doc in
+                batch.deleteDocument(doc.reference)
+            }
+            
+            batch.commit { err in
+                if let err = err {
+                    print("❌ Error deleting rooms: \(err)")
+                    return
+                }
+                
+                print("✅ Deleted rooms")
+                
+                dormRef.collection("Bill").getDocuments { snapshot2, error2 in
+                    if let error2 = error2 {
+                        print("❌ Error fetching images: \(error2)")
+                        return
+                    }
+                    
+                    let batch2 = db.batch()
+                    snapshot2?.documents.forEach { doc in
+                        batch2.deleteDocument(doc.reference)
+                    }
+                    
+                    batch2.commit { err2 in
+                        if let err2 = err2 {
+                            print("❌ Error deleting images: \(err2)")
+                            return
+                        }
+                        
+                        print("✅ Deleted images")
+                        
+                        dormRef.collection("Report").getDocuments { snapshot3, err3 in
+                        
+                            if let err3 = err3{
+                                print("error to delete report")
+                                return
+                            }
+                            
+                            let batch3 = db.batch()
+                            snapshot3?.documents.forEach { doc in
+                            
+                                batch3.deleteDocument(doc.reference)
+                            }
+                            
+                            batch3.commit { error3 in
+                            
+                                if let error3 = error3 {
+                                    print("❌ Error deleting report: \(error3)")
+                                }
+                                
+                                print("Delete Report!")
+                                
+                                dormRef.collection("Visit").getDocuments { snapshop4, error4 in
+                                
+                                    if let error4 = error4 {
+                                        print("error to delete visit")
+                                        return
+                                    }
+                                    
+                                    let batch4 = db.batch()
+                                    snapshop4?.documents.forEach{ doc in
+                                    
+                                        batch4.deleteDocument(doc.reference)
+                                    }
+                                    
+                                    batch4.commit { err4 in
+                                    
+                                        if let err4 = err4{
+                                            print("error to delete visit")
+                                        }
+                                        
+                                        print("Delete visit")
+                                        
+                                        dormRef.collection("Info").getDocuments { snapshot5, error5 in
+                                            
+                                            if let error5 = error5 {
+                                                print("error to delete Info")
+                                                return
+                                            }
+                                            
+                                            let batch5 = db.batch()
+                                            snapshot5?.documents.forEach{ doc in
+                                                
+                                                batch5.deleteDocument(doc.reference)
+                                            }
+                                            
+                                            batch5.commit { err5 in
+                                                
+                                                if let err5 = err5{
+                                                    print("error to delete info")
+                                                }
+                                                
+                                                print("Delete info")
+                                                
+                                                dormRef.delete { error in
+                                                    if let error = error {
+                                                        print("❌ Error deleting dorm document: \(error)")
+                                                    } else {
+                                                        print("✅ Deleted dorm document")
+                                                    }
+                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+
+                    }
+                }
+            }
+        }
+    }
+
+    
+    
     func deleteDorm(){
         let data: [String: Any] = [
             "isDorm": false
         ]
-        AdminMethods.deleteDocument(col: "dormitory", doc: userInfo.id)
+        deleteDormWithSubcollections(uid: userInfo.id)
         UserMethods.updateUserInfo(uid: userInfo.id, col: "userInfo", data: data)
     }
 
@@ -156,6 +355,7 @@ final class DataModel: ObservableObject {
         let dataUser: [String: Any] = [
             "isDorm": false
         ]
+        deleteUserDormInfo(uid: room.ownerUserId)
         AdminMethods.updateRoomData(did: room.did, room: room.number, data: dataDorm)
         UserMethods.updateUserInfo(uid: room.ownerUserId, col: "userInfo", data: dataUser)
         ChatMethods.addChat(senderUID: room.did, senderName: getName(), receiverUID: room.ownerUserId, username: room.owner, message: "ลาก่อน ขอให้โชคดี")

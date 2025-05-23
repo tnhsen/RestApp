@@ -12,10 +12,14 @@ struct InfoView: View {
     @EnvironmentObject var dataModel : DataModel
     var body: some View {
         Group{
-            if(dataModel.userInfo.isAdmin){
-                InfoAdminView()
+            if dataModel.userInfo.isDormitory{
+                if(dataModel.userInfo.isAdmin){
+                    InfoAdminView()
+                }else{
+                    InfoUserView()
+                }
             }else{
-                InfoUserView()
+                Screen()
             }
         }.onAppear(){
             FetchData.fetchData(dataModel: dataModel)

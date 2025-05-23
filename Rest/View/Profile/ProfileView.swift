@@ -112,23 +112,25 @@ struct ProfileView: View {
                             })
                         }
                     }else{
-                        Button(action: {
-                            showAdminConfirm = true
-                        }) {
-                        Image(systemName: "trash")
-                            .font(.title2)
-                            .foregroundColor(.red)
-                            .padding()
+                        if !dataModel.userInfo.isDormitory {
+                            Button(action: {
+                                showAdminConfirm = true
+                            }) {
+                            Image(systemName: "person.crop.circle.badge.checkmark")
+                                .font(.title2)
+                                .foregroundColor(.red)
+                                .padding()
+                            }
+                            .alert("คุณแน่ใจหรือไม่ว่าต้องเปลี่ยนเป็นผู้ดูแลหอพัก", isPresented: $showAdminConfirm, actions: {
+                                Button("เปลี่ยน", role: .destructive) {
+                                    dataModel.changeToAdmin()
+                                    showAdminConfirm = false
+                                }
+                                Button("ยกเลิก", role: .cancel) {
+                                    showAdminConfirm = false
+                                }
+                                })
                         }
-                        .alert("คุณแน่ใจหรือไม่ว่าต้องเปลี่ยนเป็นผู้ดูแลหอพัก", isPresented: $showAdminConfirm, actions: {
-                            Button("เปลี่ยน", role: .destructive) {
-                                dataModel.changeToAdmin()
-                                showAdminConfirm = false
-                            }
-                            Button("ยกเลิก", role: .cancel) {
-                                showAdminConfirm = false
-                            }
-                            })
                     }
                     
                     
