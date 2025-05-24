@@ -11,6 +11,7 @@ struct ChatMessageView: View {
     var chat: ChatMetaModel
     @EnvironmentObject var dataModel: DataModel
     @State private var newMessage: String = ""
+    @State private var timer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack {
@@ -154,6 +155,12 @@ struct ChatMessageView: View {
                             scrollView.scrollTo(last.id, anchor: .bottom)
                         }
                     }
+                    
+                    
+                }
+                
+                .onReceive(timer) { _ in
+                    FetchData.fetchMessages(chatId: chat.chatId, dataModel: dataModel)
                 }
             }
 
@@ -165,7 +172,7 @@ struct ChatMessageView: View {
                     ChatMethods.addChat(
                         senderUID: dataModel.userInfo.id,
                         senderName: dataModel.userInfo.firstName,
-                        receiverUID: getOtherUserId(from: chat.chatId, currentUserId: dataModel.userInfo.id), username: getOtherUserMember(chat: chat, dataModel: dataModel),
+                        receiverUID: getOtherUserId(from: chat.chatId, currentUserId: dataModel.userInfo.id), username: getUserMamber(chat: chat, dataModel: dataModel),
                         message: newMessage
                     )
                     newMessage = ""

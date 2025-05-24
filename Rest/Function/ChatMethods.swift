@@ -50,7 +50,13 @@ func getOtherUserMember(chat: ChatMetaModel, dataModel: DataModel) -> String {
         return "Admin"
     }
     
-    // ถ้า user เป็น admin ให้หา member name ที่ไม่ใช่ "Admin"
+
+    return chat.membersName.first(where: { $0 != "Admin" }) ?? "Unknown"
+}
+
+
+func getUserMamber(chat: ChatMetaModel, dataModel: DataModel)-> String {
+    
     return chat.membersName.first(where: { $0 != "Admin" }) ?? "Unknown"
 }
 

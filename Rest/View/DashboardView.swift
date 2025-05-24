@@ -96,7 +96,7 @@ struct DashboardSumView: View {
                 .bold()
                 .padding(.bottom, 4)
 
-            GroupBox(label: Label("ค่าใช้จ่ายรวม", systemImage: "creditcard")) {
+            GroupBox(label: Label("รายรับ", systemImage: "creditcard")) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("รวมทั้งหมด: \(dashboard.totalBill, specifier: "%.f") บาท")
                     Text("ค่าไฟ: \(dashboard.eleUse, specifier: "%.f") หน่วย / \(dashboard.eleTotal, specifier: "%.f") บาท")

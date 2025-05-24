@@ -10,7 +10,7 @@ import SwiftUI
 struct BillNotiDetail: View {
     
     @EnvironmentObject var dataModel: DataModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     var bill: BillModel
     
     var body: some View {
@@ -157,7 +157,7 @@ struct BillNotiDetail: View {
                             message: Text(dataModel.alertDetail),
                             dismissButton: .default(Text("OK")) {
                                 dataModel.showAlert = false
-                                presentationMode.wrappedValue.dismiss()
+                                dismiss()
                             }
                         )
                     }

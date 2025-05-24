@@ -65,10 +65,9 @@ struct HomePageView: View {
                 
                 
             }
-        }.onAppear(){
-                FetchData.fetchUserData(dataModel: dataModel)
-            
-            FetchData.fetchDormInvite(dataModel: dataModel)
+        }
+        .onAppear(){
+            FetchData.fetchUserData(dataModel: dataModel)
             
             }
         .alert(isPresented: $dataModel.showAlert) {

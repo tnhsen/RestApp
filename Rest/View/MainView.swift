@@ -33,12 +33,12 @@ struct MainView: View {
                 }
         }
         .tint(Color(hex: colorLevel2))
-        .onAppear {
-            FetchData.fetchData(dataModel: dataModel)
-            dataModel.showAlert = false
-            
-            dataModel.NavigateToMain = false
-        }
+//        .onAppear {
+//            FetchData.fetchData(dataModel: dataModel)
+//            dataModel.showAlert = false
+//            
+//            dataModel.NavigateToMain = false
+//        }
     }
     
     @ViewBuilder
@@ -48,8 +48,18 @@ struct MainView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         NavigationLink(destination: ProfileView()) {
-                            Image(systemName: "person.circle")
-                                .font(.title)
+                            if let image = dataModel.selectedImage {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }else {
+                                Image(systemName: "person.circle")
+                                    .font(.title)
+                            }
+//                            Image(systemName: "person.circle")
+//                                .font(.title)
                         }
                         .buttonStyle(.plain)
                     }

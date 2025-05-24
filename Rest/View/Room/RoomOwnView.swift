@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RoomOwnView: View {
     
+    
     @EnvironmentObject var dataModel: DataModel
     @Environment(\.presentationMode) var presentationMode
     var room: RoomModel
@@ -184,6 +185,7 @@ struct RoomOwnView: View {
                                 dataModel.UpdateBill(ele: Double(selectedEleUse), water: Double(selectedWaterUse), room: room)
                                 print("update bill: \(selectedWaterUse), \(selectedEleUse)")
                                 showUpdateBillSheet = false
+                                FetchData.fetchRoomsForAdmin(dataModel: dataModel)
                             }
                             .padding()
                             .foregroundColor(.blue)

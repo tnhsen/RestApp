@@ -75,8 +75,6 @@ struct InfoUserView: View {
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                 }
             }
-        }.onAppear(){
-            FetchData.fetchData(dataModel: dataModel)
         }
     }
 }

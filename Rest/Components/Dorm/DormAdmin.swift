@@ -17,15 +17,24 @@ struct DormAdmin: View {
         
         VStack{
             if dorm.img == "" {
-                Image(systemName: "house").font(.system(size: 120))
-                    .border(Color.gray, width: 1)
-                    .padding()
-                    .foregroundColor(Color.gray)
+//                Image("house").font(.system(size: 120))
+//                    .border(Color.gray, width: 1)
+//                    .padding()
+//                    .foregroundColor(Color.gray)
+                Image("house")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
+                    .shadow(radius: 5)
             }else{
-                Image(systemName: "house").font(.system(size: 120))
-                    .border(Color.gray, width: 1)
-                    .padding()
-                    .foregroundColor(Color.gray)
+                Image(systemName: "house").resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
+                    .shadow(radius: 5)
             }
             
             Text(dorm.name).font(.title)

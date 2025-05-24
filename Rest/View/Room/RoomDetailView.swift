@@ -9,15 +9,23 @@ import SwiftUI
 
 struct RoomDetailView: View {
     
+
+    @EnvironmentObject var dataModel: DataModel
+    
     var room: RoomModel
     
     var body: some View {
-        if(room.isOwn){
-            RoomOwnView(room: room)
-        }else{
-            RoomNotOwnView(room: room)
+        Group{
+            if(room.isOwn){
+                RoomOwnView(room: room)
+            }else{
+                RoomNotOwnView(room: room)
+            }
         }
+        
     }
+        
+
 }
 
 struct RoomViewCom_Previews: PreviewProvider {

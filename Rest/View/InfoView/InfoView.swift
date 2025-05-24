@@ -21,9 +21,10 @@ struct InfoView: View {
             }else{
                 Screen()
             }
-        }.onAppear(){
-            FetchData.fetchData(dataModel: dataModel)
         }
+//        .onAppear(){
+//            FetchData.fetchData(dataModel: dataModel)
+//        }
         /*
         GeometryReader { geometry in
             ZStack {

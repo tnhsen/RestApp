@@ -41,6 +41,9 @@ class FetchData {
                     dataModel.userInfo.isDormitory = userData["isDorm"] as? Bool ?? false
                     dataModel.userInfo.isAdmin = userData["isAdmin"] as? Bool ?? false
                     print("✅ Fetch Data Success!!")
+                    
+                }
+                DispatchQueue.main.async {
                     if(dataModel.userInfo.isDormitory){
                         if(dataModel.userInfo.isAdmin){
                             fetchDormDataAsAdmin(dataModel: dataModel)
@@ -56,8 +59,6 @@ class FetchData {
                         fetchDormInvite(dataModel: dataModel)
                         fectVisitList(type: FetchData.USER, dataModel: dataModel)
                     }
-                }
-                DispatchQueue.main.async {
                     fetchChat(type: USER,dataModel: dataModel)
                     dataModel.calDashBoard()
                 }

@@ -27,7 +27,13 @@ struct ChatListView: View {
         }
         .navigationTitle("แชท")
         .onAppear(){
-            FetchData.fetchData(dataModel: dataModel)
+            if dataModel.userInfo.isAdmin{
+                FetchData.fetchChat(type: FetchData.DORM, dataModel: dataModel)
+                
+            }else{
+                FetchData.fetchChat(type: FetchData.USER, dataModel: dataModel)
+                
+            }
         }
         
     }

@@ -31,7 +31,7 @@ struct Room: View {
                             if(room.isWaiting){
                                 Circle()
                                     .fill(Color.blue)
-                                    .opacity(1)
+                                    .opacity(0.3)
                                     .frame(width: 30)
                             }else{
                                 Circle()
